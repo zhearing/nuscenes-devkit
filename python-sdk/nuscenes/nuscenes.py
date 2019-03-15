@@ -19,6 +19,8 @@ from matplotlib.axes import Axes
 from pyquaternion import Quaternion
 import sklearn.metrics
 from tqdm import tqdm
+import matplotlib.cm as cm
+import matplotlib as mpl
 
 from nuscenes.utils.map_mask import MapMask
 from nuscenes.utils.data_classes import LidarPointCloud, RadarPointCloud, Box
@@ -898,8 +900,6 @@ class NuScenesExplorer:
         current_time = first_sample_rec['timestamp']
 
         # Init color maps for lidar depth
-        import matplotlib.cm as cm
-        import matplotlib as mpl
         norm = mpl.colors.Normalize(vmin=0, vmax=50)
         m = cm.ScalarMappable(norm=norm, cmap=cm.viridis)
 
@@ -928,22 +928,19 @@ class NuScenesExplorer:
                         raise Exception('Error: Missing image %s' % impath)
 
                     # TODO: This is experimental code not meant to be published
-                    if True:
-                        sample_record = self.nusc.get('sample', sd_rec['sample_token'])
-                        pointsensor_token = sample_record['data']['LIDAR_TOP']
-                        camera_token = sd_rec['token']
-                        points, coloring, im = self.map_pointcloud_to_image(pointsensor_token, camera_token)
-                        im = np.asarray(im)
-                        points = np.round(points).astype(np.int32)
+                    sample_record = self.nusc.get('sample', sd_rec['sample_token'])
+                    pointsensor_token = sample_record['data']['LIDAR_TOP']
+                    camera_token = sd_rec['token']
+                    points, coloring, im = self.map_pointcloud_to_image(pointsensor_token, camera_token)
+                    im = np.asarray(im)
+                    points = np.round(points).astype(np.int32)
 
-                        # Draw points in image
-                        for point, color_val in zip(points.T, coloring.T):
-                            point = tuple(point)[:2]
-                            color = tuple(np.round(np.asarray(m.to_rgba(color_val)[:3]) * 255))
-                            color = (color[0], color[1], color[2])
-                            cv2.circle(im, point, 5, color, -1)
-                    else:
-                        im = cv2.imread(impath)
+                    # Draw points in image
+                    for point, color_val in zip(points.T, coloring.T):
+                        point = tuple(point)[:2]
+                        color = tuple(np.round(np.asarray(m.to_rgba(color_val)[:3]) * 255))
+                        color = (color[0], color[1], color[2])
+                        cv2.circle(im, point, 5, color, -1)
                     for box in boxes:
                         c = self.get_color(box.name)
                         box.render_cv2(im, view=camera_intrinsic, normalize=True, colors=(c, c, c))
