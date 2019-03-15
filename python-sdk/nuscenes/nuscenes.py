@@ -555,7 +555,7 @@ class NuScenesExplorer:
 
         # Remove points that are either outside or behind the camera. Leave a margin of 1 pixel for aesthetic reasons.
         mask = np.ones(depths.shape[0], dtype=bool)
-        mask = np.logical_and(mask, depths > 0)
+        mask = np.logical_and(mask, depths > 1)  # TODO: modified to filter close points
         mask = np.logical_and(mask, points[0, :] > 1)
         mask = np.logical_and(mask, points[0, :] < im.size[0] - 1)
         mask = np.logical_and(mask, points[1, :] > 1)
@@ -936,11 +936,12 @@ class NuScenesExplorer:
                     points = np.round(points).astype(np.int32)
 
                     # Draw points in image
+                    pt_size = 3
                     for point, color_val in zip(points.T, coloring.T):
                         point = tuple(point)[:2]
                         color = tuple(np.round(np.asarray(m.to_rgba(color_val)[:3]) * 255))
                         color = (color[0], color[1], color[2])
-                        cv2.circle(im, point, 5, color, -1)
+                        cv2.circle(im, point, pt_size, color, -1)
                     for box in boxes:
                         c = self.get_color(box.name)
                         box.render_cv2(im, view=camera_intrinsic, normalize=True, colors=(c, c, c))

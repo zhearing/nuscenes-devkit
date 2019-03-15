@@ -7,6 +7,8 @@ Exports a video of each scene (with annotations) to disk.
 """
 import os
 
+import tqdm
+
 from nuscenes.nuscenes import NuScenes
 
 # Load NuScenes class
@@ -19,7 +21,7 @@ if not os.path.isdir(out_dir):
     os.makedirs(out_dir)
 
 # Write videos to disk
-for scene_token in scene_tokens:
+for scene_token in tqdm.tqdm(scene_tokens):
     scene = nusc.get('scene', scene_token)
     print('Writing scene %s' % scene['name'])
     out_path = os.path.join(out_dir, scene['name']) + '.avi'
