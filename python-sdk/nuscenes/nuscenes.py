@@ -897,6 +897,12 @@ class NuScenesExplorer:
 
         current_time = first_sample_rec['timestamp']
 
+        # Init color maps for lidar depth
+        import matplotlib.cm as cm
+        import matplotlib as mpl
+        norm = mpl.colors.Normalize(vmin=0, vmax=50)
+        m = cm.ScalarMappable(norm=norm, cmap=cm.viridis)
+
         while current_time < last_sample_rec['timestamp']:
 
             current_time += time_step
@@ -927,10 +933,12 @@ class NuScenesExplorer:
                         pointsensor_token = sample_record['data']['LIDAR_TOP']
                         camera_token = sd_rec['token']
                         points, coloring, im = self.map_pointcloud_to_image(pointsensor_token, camera_token)
+                        im = np.asarray(im)
 
                         # Draw points in image
-                        for point, color in zip(points, coloring):
-                            cv2.circle(im, point, 5, color, -1)
+                        for point, color_val in zip(points.T, coloring.T):
+                            color = m.to_rgba(x)
+                            cv2.circle(im, tuple(point), 5, color, -1)
 
                     else:
                         im = cv2.imread(impath)
