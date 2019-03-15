@@ -935,7 +935,7 @@ class NuScenesExplorer:
                     pointsensor_token = sample_record['data']['LIDAR_TOP']
                     camera_token = sd_rec['token']
                     points, coloring, im = self.map_pointcloud_to_image(pointsensor_token, camera_token)
-                    im = np.asarray(im)[:, :, ::-1]  # RGB to BGR
+                    im = cv2.cvtColor(np.asarray(im), cv2.COLOR_RGB2BGR)
                     points = np.round(points).astype(np.int32)
 
                     # Draw points in image
@@ -943,7 +943,7 @@ class NuScenesExplorer:
                     for point, color_val in zip(points.T, coloring.T):
                         point = tuple(point)[:2]
                         color = tuple(np.round(np.asarray(m.to_rgba(color_val)[:3]) * 255))
-                        color = (color[0], color[1], color[2])
+                        color = (int(color[2]), int(color[1]), int(color[0]))
                         cv2.circle(im, point, pt_size, color, -1)
                     for box in boxes:
                         c = self.get_color(box.name)
