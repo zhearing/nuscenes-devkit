@@ -10,7 +10,7 @@ import os
 from nuscenes.nuscenes import NuScenes
 
 # Load NuScenes class
-nusc = NuScenes()
+nusc = NuScenes(dataroot='/data/exp/nuScenes-blurring-data/nuscenes-v1.0')
 scene_tokens = [s['token'] for s in nusc.scene]
 
 # Create output directory

@@ -48,7 +48,7 @@ class NuScenes:
         :param verbose: Whether to print status messages during load.
         :param map_resolution: Resolution of maps (meters).
         """
-        if version not in ['v1.0-trainval', 'v1.0-test', 'v1.0-mini']:
+        if version not in ['v1.0', 'v1.0-trainval', 'v1.0-test', 'v1.0-mini']:
             raise ValueError('Invalid DB version: {}'.format(version))
 
         self.version = version
