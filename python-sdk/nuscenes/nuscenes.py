@@ -938,9 +938,9 @@ class NuScenesExplorer:
 
                         # Draw points in image
                         for point, color_val in zip(points.T, coloring.T):
-                            color = m.to_rgba(color_val)[:3]
-                            cv2.circle(im, tuple(point)[:2], 5, color, -1)
-
+                            point = tuple(point)[:2]
+                            color = tuple(np.round(np.asarray(m.to_rgba(color_val)[:3]) * 255).astype(np.uint8))
+                            cv2.circle(im, point, 5, color, -1)
                     else:
                         im = cv2.imread(impath)
                     for box in boxes:
