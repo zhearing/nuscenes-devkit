@@ -6,6 +6,7 @@
 Exports a video of each scene (with annotations) to disk.
 """
 import os
+import random
 
 import tqdm
 
@@ -14,6 +15,7 @@ from nuscenes.nuscenes import NuScenes
 # Load NuScenes class
 nusc = NuScenes(dataroot='/data/exp/nuScenes-blurring-data/nuscenes-v1.0')
 scene_tokens = [s['token'] for s in nusc.scene]
+random.shuffle(scene_tokens)
 
 # Create output directory
 out_dir = os.path.expanduser('~/nuscenes-visualization/scene-videos')
