@@ -934,11 +934,12 @@ class NuScenesExplorer:
                         camera_token = sd_rec['token']
                         points, coloring, im = self.map_pointcloud_to_image(pointsensor_token, camera_token)
                         im = np.asarray(im)
+                        points = np.round(points).astype(np.int32)
 
                         # Draw points in image
                         for point, color_val in zip(points.T, coloring.T):
                             color = m.to_rgba(color_val)[:3]
-                            cv2.circle(im, tuple(point), 5, color, -1)
+                            cv2.circle(im, tuple(point)[:2], 5, color, -1)
 
                     else:
                         im = cv2.imread(impath)
