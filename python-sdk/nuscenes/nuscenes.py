@@ -937,7 +937,7 @@ class NuScenesExplorer:
 
                         # Draw points in image
                         for point, color_val in zip(points.T, coloring.T):
-                            color = m.to_rgba(x)
+                            color = m.to_rgba(color_val)[:3]
                             cv2.circle(im, tuple(point), 5, color, -1)
 
                     else:
