@@ -932,7 +932,7 @@ class NuScenesExplorer:
                     pointsensor_token = sample_record['data']['LIDAR_TOP']
                     camera_token = sd_rec['token']
                     points, coloring, im = self.map_pointcloud_to_image(pointsensor_token, camera_token)
-                    im = np.asarray(im)
+                    im = np.asarray(im)[:, :, ::-1]  # RGB to BGR
                     points = np.round(points).astype(np.int32)
 
                     # Draw points in image
