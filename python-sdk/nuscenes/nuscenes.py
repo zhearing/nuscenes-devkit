@@ -877,9 +877,9 @@ class NuScenesExplorer:
 
         time_step = 1 / freq * 1e6  # Time-stamps are measured in micro-seconds.
 
-        window_name = '{}'.format(scene_rec['name'])
-        cv2.namedWindow(window_name)
-        cv2.moveWindow(window_name, 0, 0)
+        #window_name = '{}'.format(scene_rec['name'])
+        #cv2.namedWindow(window_name)
+        #cv2.moveWindow(window_name, 0, 0)
 
         canvas = np.ones((2 * imsize[1], 3 * imsize[0], 3), np.uint8)
         if out_path is not None:
@@ -920,7 +920,20 @@ class NuScenesExplorer:
                     # Load and render
                     if not osp.exists(impath):
                         raise Exception('Error: Missing image %s' % impath)
-                    im = cv2.imread(impath)
+
+                    # TODO: This is experimental code not meant to be published
+                    if True:
+                        sample_record = nusc.get('sample', sd_rec['sample_token'])
+                        pointsensor_token = sample_record['data']['LIDAR_TOP']
+                        camera_token = sd_rec['token']
+                        points, coloring, im = self.map_pointcloud_to_image(pointsensor_token, camera_token)
+
+                        # Draw points in image
+                        for point, color in zip(points, coloring):
+                            cv2.circle(im, point, 5, color, -1)
+
+                    else:
+                        im = cv2.imread(impath)
                     for box in boxes:
                         c = self.get_color(box.name)
                         box.render_cv2(im, view=camera_intrinsic, normalize=True, colors=(c, c, c))
@@ -935,7 +948,7 @@ class NuScenesExplorer:
                     prev_recs[channel] = sd_rec  # Store here so we don't render the same image twice.
 
             # Show updated canvas.
-            cv2.imshow(window_name, canvas)
+            #cv2.imshow(window_name, canvas)
             if out_path is not None:
                 out.write(canvas)
 
