@@ -939,7 +939,8 @@ class NuScenesExplorer:
                         # Draw points in image
                         for point, color_val in zip(points.T, coloring.T):
                             point = tuple(point)[:2]
-                            color = tuple(np.round(np.asarray(m.to_rgba(color_val)[:3]) * 255).astype(np.uint8))
+                            color = tuple(np.round(np.asarray(m.to_rgba(color_val)[:3]) * 255))
+                            color = (color[0], color[1], color[2])
                             cv2.circle(im, point, 5, color, -1)
                     else:
                         im = cv2.imread(impath)
