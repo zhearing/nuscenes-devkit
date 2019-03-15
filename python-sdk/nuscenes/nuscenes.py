@@ -923,10 +923,10 @@ class NuScenesExplorer:
 
                     # TODO: This is experimental code not meant to be published
                     if True:
-                        sample_record = nusc.get('sample', sd_rec['sample_token'])
+                        sample_record = self.nusc.get('sample', sd_rec['sample_token'])
                         pointsensor_token = sample_record['data']['LIDAR_TOP']
                         camera_token = sd_rec['token']
-                        points, coloring, im = self.map_pointcloud_to_image(pointsensor_token, camera_token)
+                        points, coloring, im = self.nusc.map_pointcloud_to_image(pointsensor_token, camera_token)
 
                         # Draw points in image
                         for point, color in zip(points, coloring):
