@@ -876,6 +876,7 @@ class NuScenesExplorer:
         horizontal_flip = ['CAM_BACK_LEFT', 'CAM_BACK', 'CAM_BACK_RIGHT']  # Flip these for aesthetic reasons.
 
         time_step = 1 / freq * 1e6  # Time-stamps are measured in micro-seconds.
+        frame_idx = 0
 
         #window_name = '{}'.format(scene_rec['name'])
         #cv2.namedWindow(window_name)
@@ -906,6 +907,8 @@ class NuScenesExplorer:
         while current_time < last_sample_rec['timestamp']:
 
             current_time += time_step
+            print('Frame %d' % frame_idx)
+            frame_idx += 1
 
             # For each channel, find first sample that has time > current_time.
             for channel, sd_rec in current_recs.items():
@@ -937,6 +940,7 @@ class NuScenesExplorer:
                         points = np.round(points).astype(np.int32)
 
                         # Draw points in image
+                        
                         for point, color_val in zip(points.T, coloring.T):
                             point = tuple(point)[:2]
                             color = tuple(np.round(np.asarray(m.to_rgba(color_val)[:3]) * 255))
